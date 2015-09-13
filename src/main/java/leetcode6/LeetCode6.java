@@ -1,6 +1,6 @@
-package leetcode4;
+package leetcode6;
 
-public class LeetCode4 {
+public class LeetCode6 {
 	/**
 	 * @param s 一个字符串
 	 * @param numRows
@@ -43,7 +43,7 @@ public class LeetCode4 {
     }
     
     public static void main(String[] args) {
-		LeetCode4 leetCode4 = new LeetCode4();
+		LeetCode6 leetCode4 = new LeetCode6();
 		// PAHNAPLSIIGYIR
 		System.out.println(leetCode4.convert("PAYPALISHIRING", 1));
 	}
