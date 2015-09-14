@@ -1,19 +1,22 @@
 package eightqueens;
 
-public class EightQueens3 {
+public class EightQueensMe {
 	private int queenNum;
 	// 位置索引表示行数，值表示列数
 	private int[] queenArr;
 	// 临时设置用于保存能成功摆放皇后的位置种数
 	public int goodPositionNum;
 	
-	public EightQueens3() {
+	public EightQueensMe() {
 		this(8);
 	}
 	
-	public EightQueens3(int queenNum) {
-		queenNum = 8;
+	public EightQueensMe(int queenNum) {
+		this.queenNum = queenNum;
 		queenArr = new int[queenNum];
+		for (int i = 0; i < queenNum; i++) {
+			queenArr[i] = -1;
+		}
 	}
 	
 	/**
@@ -67,8 +70,8 @@ public class EightQueens3 {
 	}
 	
 	public static void main(String[] args) {
-		EightQueens3 eightQueens3 = new EightQueens3();
-		eightQueens3.trial(0);
-		System.out.println(eightQueens3.goodPositionNum);
+		EightQueensMe eightQueensMe = new EightQueensMe();
+		eightQueensMe.trial(0);
+		System.out.println(eightQueensMe.goodPositionNum);
 	}
 }
