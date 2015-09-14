@@ -1,5 +1,11 @@
 package eightqueens;
 
+/**
+ * 寻找八皇后安全摆放位置的过程，就是先序遍历
+ * 一颗状态树的过程。树的深度等于棋盘边长
+ * @author yuncong
+ *
+ */
 public class EightQueensMe {
 	private int queenNum;
 	// 位置索引表示行数，值表示列数
