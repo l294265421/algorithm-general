@@ -39,7 +39,8 @@ public class EightQueensMe {
 	}
 	
 	/**
-	 * 判断把皇后放在第
+	 * 判断把皇后放在第i行第j列是否安全；是通过
+	 * 前面第i行前面各行中的皇后的摆放位置
 	 * @param i
 	 * @param j
 	 * @return
