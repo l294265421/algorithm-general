@@ -2,10 +2,12 @@ package leetcode9;
 
 public class LeetCode9 {
     public boolean isPalindrome(int x) {
+    	// 负数没有回文数
         if (x < 0) {
 			return false;
 		}
         
+        // 大于等于10的数，如果倒转过来与原来的数不等，也不是回文数
         if (x >= 10) {
 			int palindromeCandidate = reverse(x);
 			if (palindromeCandidate != x) {
