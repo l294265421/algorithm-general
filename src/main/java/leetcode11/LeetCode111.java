@@ -36,7 +36,7 @@ public class LeetCode111 {
 		return value1 < value2 ? value1 * step : value2 * step;
 	}
 	public static void main(String[] args) {
-		int[] height = new int[] {1,2,5};
+		int[] height = new int[] {1,2,5,34,35,12,43};
 		LeetCode111 leetCode11 = new LeetCode111();
 		System.out.println(leetCode11.maxArea(height));
 	}
