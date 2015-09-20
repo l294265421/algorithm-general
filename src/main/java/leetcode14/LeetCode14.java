@@ -7,6 +7,7 @@ public class LeetCode14 {
 			return "";
 		}
 		
+		// 最长公共前缀不可能比数组中任何一个元素长
 		String prefix = strs[0];
 		for(int i = 1; i < len; i++) {
 			String temp = strs[i];
