@@ -1,11 +1,7 @@
 package dynamicprogramming;
 
 public class MinCoins {
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	 static void main(String[] args) {
 		int[] coins = { 1, 3, 5 };
 		int value = 11;
 		int[] solu = new int[value];
