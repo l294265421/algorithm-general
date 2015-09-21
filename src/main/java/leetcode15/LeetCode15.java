@@ -43,6 +43,7 @@ public class LeetCode15 {
     			    	if (!integerListList.contains(integerList)) {
 							integerListList.add(integerList);
 						}
+    			    	break;
 					}
     			}
     		}
@@ -60,6 +61,7 @@ public class LeetCode15 {
     			    	if (!integerListList.contains(integerList)) {
 							integerListList.add(integerList);
 						}
+    			    	break;
 					}
     			}
     		}
