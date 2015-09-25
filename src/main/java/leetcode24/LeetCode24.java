@@ -2,11 +2,12 @@ package leetcode24;
 
 public class LeetCode24 {
     public ListNode swapPairs(ListNode head) {
-    	if (head == null && head.next == null) {
+    	if (head == null || head.next == null) {
 			return head;
 		}
     	
-    	ListNode zeroListNode = new ListNode(0);
+    	// 链表至少包含两个元素
+    	ListNode zeroListNode = new ListNode(10);
     	zeroListNode.next = head;
     	ListNode firstListNode = head;
     	ListNode secondListNode = head.next;
@@ -17,11 +18,13 @@ public class LeetCode24 {
 			firstListNode.next = secondListNode.next;
 			secondListNode.next = firstListNode;
 			// 改变指针本身
-			zeroListNode = secondListNode;
+			zeroListNode = firstListNode;
 			if (firstListNode.next != null && 
 					firstListNode.next.next != null) {
 				firstListNode = firstListNode.next;
-				secondListNode = firstListNode.next.next;
+				// 注意这里的firstListNode已是前面firstListNode的
+				// 后继
+				secondListNode = firstListNode.next;
 			} else {
 				break;
 			}
@@ -39,10 +42,10 @@ public class LeetCode24 {
 		listNode1.next = listNode2;
 		listNode2.next = listNode3;
 		listNode3.next = listNode4;
-		leetCode24.swapPairs(listNode1);
-		while (listNode1 != null) {
-		  System.out.println(listNode1.val);
-		  listNode1 = listNode1.next;
+		ListNode listNode5 = leetCode24.swapPairs(listNode1);
+		while (listNode5 != null) {
+		  System.out.println(listNode5.val);
+		  listNode5 = listNode5.next;
 		}
 	}
 }
