@@ -12,22 +12,26 @@ public class LeetCode29 {
 		
 		int result = 0;
 		if (dividend >= 0 && divisor > 0) {
-			while (dividend - divisor >= 0) {
+			dividend -= divisor;
+			while (dividend >= 0) {
 				result++;
 				dividend -= divisor;
 			}
 		} else if (dividend < 0 && divisor < 0) {
-			while (dividend - divisor <= 0) {
+			dividend -= divisor;
+			while (dividend <= 0) {
 				result++;
 				dividend -= divisor;
 			}
 		} else if (dividend >= 0 && divisor < 0) {
-			while (dividend + divisor >= 0) {
+			dividend += divisor;
+			while (dividend >= 0) {
 				result--;
 				dividend += divisor;
 			}
 		} else {
-			while (dividend + divisor <= 0) {
+			dividend += divisor;
+			while (dividend<= 0) {
 				result--;
 				dividend += divisor;
 			}
