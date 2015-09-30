@@ -22,10 +22,9 @@ public class LeetCode491 {
 			return null;
 		}
         
-        String[] temp = new String[len];
-        for(int i = 0; i < len; i++) {
-        	temp[i] = sort(strs[i]);
-        }
+        Arrays.sort(strs);
+        
+        List<char[]> charsList = convert(strs);
         
         List<List<String>> resultList = new ArrayList<List<String>>();
         // 用于标记哪些已经找到的归属
@@ -35,9 +34,10 @@ public class LeetCode491 {
         		List<String> result = new ArrayList<String>();
         		result.add(strs[i]);
         		bitSet.set(i);
+        		char[] icharArr = charsList.get(i);
         		for(int j = i + 1; j < len; j++) {
         			if (!bitSet.get(j)) {
-						if (temp[j].equals(temp[i])) {
+						if (isEqual(icharArr, charsList.get(j))) {
 							result.add(strs[j]);
 							bitSet.set(j);
 						}
@@ -49,18 +49,41 @@ public class LeetCode491 {
         return resultList;
     }
 	
-	public String sort(String s) {
-		int len = s.length();
-		char[] temp = new char[len];
-		for(int i = 0; i < len; i++) {
-			temp[i] = s.charAt(i);
+	public List<char[]> convert(String[] strs) {
+		int len = strs.length;
+		List<char[]> charsList = new ArrayList<char[]>(len);
+		for(int i = 0; i < len; i ++) {
+			String s = strs[i];
+			int l = s.length();
+			char[] temp = new char[l];
+			for(int j = 0; j < l; j++) {
+				temp[j] = s.charAt(j);
+			}
+			Arrays.sort(temp);
+			charsList.add(temp);
 		}
-		Arrays.sort(temp);
-		StringBuffer resultBuffer = new StringBuffer();
-		for (char c: temp) {
-			resultBuffer.append(c);
+
+		return charsList;
+	}
+	
+	/**
+	 * 判断两个字符数组是否一样
+	 * @param one
+	 * @param two
+	 * @return
+	 */
+	public boolean isEqual(char[] one, char[] two) {
+		int len1 = one.length;
+		int len2 = two.length;
+		if (len1 != len2) {
+			return false;
 		}
-		return resultBuffer.toString();
+		for(int i = 0; i < len1; i++) {
+			if(one[i] != two[i]) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public static void main(String[] args) {
