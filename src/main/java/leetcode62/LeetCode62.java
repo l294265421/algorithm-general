@@ -37,6 +37,6 @@ public class LeetCode62 {
     
     public static void main(String[] args) {
 		LeetCode62 leetCode62 = new LeetCode62();
-		System.out.println(leetCode62.uniquePaths(1, 3));
+		System.out.println(leetCode62.uniquePaths(2, 4));
 	}
 }
