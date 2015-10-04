@@ -3,7 +3,9 @@ package leetcode71;
 public class LeetCode71 {
 	/**
 	 * 处理的路径以/结尾，如果路径不是以/
-	 * 结尾，就在路径后面添上/再处理
+	 * 结尾，就在路径后面添上/再处理;
+	 * 收获：被处理的数据必须跟之前假定程序
+	 * 处理的数据格式一致
 	 * @param path
 	 * @return
 	 */
