@@ -70,7 +70,7 @@ public class LeetCode78 {
 	
 	public static void main(String[] args) {
 		LeetCode78 leetCode78 = new LeetCode78();
-		int[] nums = new int[] {1,2,3};
+		int[] nums = new int[] {1,2,2};
 		System.out.println(leetCode78.subsets(nums));
 	}
 }
