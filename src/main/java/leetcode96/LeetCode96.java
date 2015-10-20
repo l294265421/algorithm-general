@@ -1,8 +1,17 @@
 package leetcode96;
 
 public class LeetCode96 {
+	/**
+	 * 分析：本题其实关键是递推过程的分析，n个点中每个点都可以作为root，
+	 * 当 i 作为root时，小于 i  的点都只能放在其左子树中，大于 i 的点
+	 * 只能放在右子树中，此时只需求出左、右子树各有多少种，二者相乘即为
+	 * 以 i 作为root时BST的总数。
+	 * 
+	 * Catalan number
+	 * @param n
+	 * @return
+	 */
 	public int numTrees(int n) {
-		// http://blog.csdn.net/jiadebin890724/article/details/23305915
         int[] res = new int[n+1];
         res[0] = 1;
         res[1] = 1;//base case
