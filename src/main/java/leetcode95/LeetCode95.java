@@ -8,6 +8,8 @@ public class LeetCode95 {
     public List<TreeNode> generateTrees(int n) {
         List<TreeNode> resultList = new ArrayList<TreeNode>();
         if (n == 0) {
+        	// 奇怪
+        	resultList.add(null);
 			return resultList;
 		}
         
