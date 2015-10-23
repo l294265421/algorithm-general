@@ -1,5 +1,11 @@
 package leetcode105;
 
+/**
+ * 核心思想：树的中序遍历中，根节点的左子树中所有元素都在根节点的左边，右子树中得所有元素都在根节点的右边；
+ * 先序遍历中，根先出现
+ * @author yuncong
+ *
+ */
 public class LeetCode105 {
 	private int rootTh = 0;
 	public TreeNode buildTree(int[] preorder, int[] inorder) {
