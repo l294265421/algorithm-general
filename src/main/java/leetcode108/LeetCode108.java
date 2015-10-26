@@ -1,5 +1,7 @@
 package leetcode108;
 
+import global.TreeNode;
+
 public class LeetCode108 {
     public TreeNode sortedArrayToBST(int[] nums) {
         if (nums == null) {
