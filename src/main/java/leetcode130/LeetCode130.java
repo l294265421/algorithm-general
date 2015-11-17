@@ -6,50 +6,82 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 核心思想：寻找O区域，判定其中是否有边界元素，有的话，
- * 就把所有O变为X，否则什么都不做。
+ * 核心思想：寻找O区域，判定其中是否有边界元素，有的话， 就把所有O变为X，否则什么都不做。
+ * 
  * @author yuncong
  *
  */
 public class LeetCode130 {
 	public void solve(char[][] board) {
-		int yLen = board.length;
-		int xLen = 0;
-		if (yLen != 0) {
-			xLen = board[0].length;
+		int rowNum = board.length;
+		int columnNum = 0;
+		if (rowNum != 0) {
+			columnNum = board[0].length;
 		} else {
 			return;
 		}
 
-		List<HashSet<Coordinate>> alreadyCheck = new LinkedList<>();
-		for(int i = 0; i <= xLen; i++) {
-			for(int j = 0; j <= yLen; j++) {
+		List<Set<Coordinate>> alreadyCheck = new LinkedList<>();
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
 				if (board[i][j] == 'O') {
-					Coordinate coordinate = new Coordinate(i, j);
-					for(HashSet<Coordinate> temp : alreadyCheck) {
-						if (temp.contains(coordinate)) {
+					Coordinate startPoint = new Coordinate(i, j);
+					boolean isChecked = false;
+					for (Set<Coordinate> temp : alreadyCheck) {
+						if (temp.contains(startPoint)) {
+							isChecked = true;
 							break;
 						}
 					}
-					boolean isConvert = false;
+					if (isChecked) {
+						continue;
+					}
+					
+					boolean isConvert = true;
+					if (startPoint.x == rowNum - 1
+							|| startPoint.y == columnNum - 1
+							|| startPoint.x == 0 || startPoint.y == 0) {
+						isConvert = false;
+					}
+
 					Set<Coordinate> next = new HashSet<>();
+					next.add(startPoint);
 					LinkedList<Coordinate> queue = new LinkedList<>();
-					queue.add(coordinate);
+					queue.add(startPoint);
 					// 只需要向右和向下寻找，寻找那些已经确定是同一类元素的邻居
 					while (!queue.isEmpty()) {
 						Coordinate center = queue.pop();
 						Coordinate right = center.right();
-						if (right.x < xLen && board[right.x][right.y] == 'O') {
+						if (right.y < columnNum
+								&& board[right.x][right.y] == 'O') {
 							boolean isNotContain = next.add(right);
 							if (isNotContain) {
 								queue.add(right);
-								if (!isConvert && right.y == yLen - 1) {
-									isConvert = true;
+								if (isConvert && right.y == columnNum - 1) {
+									isConvert = false;
+								}
+							}
+						}
+
+						Coordinate down = center.down();
+						if (down.x < rowNum && board[down.x][down.y] == 'O') {
+							boolean isNotContain = next.add(down);
+							if (isNotContain) {
+								queue.add(down);
+								if (isConvert && down.x == rowNum - 1) {
+									isConvert = false;
 								}
 							}
 						}
 					}
-					
+
+					if (isConvert) {
+						for (Coordinate coordinate2 : next) {
+							board[coordinate2.x][coordinate2.y] = 'X';
+						}
+					}
+					alreadyCheck.add(next);
+
 				}
 			}
 		}
@@ -83,32 +115,32 @@ public class LeetCode130 {
 		public void setY(int y) {
 			this.y = y;
 		}
-		
+
 		public Coordinate right() {
 			return new Coordinate(x, y + 1);
 		}
-		
+
 		public Coordinate down() {
 			return new Coordinate(x + 1, y);
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
 				return true;
 			}
-			
+
 			if (!(obj instanceof Coordinate)) {
 				return false;
 			}
-			
+
 			Coordinate otherCoordinate = (Coordinate) obj;
-			
-			boolean result = this.x == otherCoordinate.x &&
-							 this.y == otherCoordinate.y;
+
+			boolean result = this.x == otherCoordinate.x
+					&& this.y == otherCoordinate.y;
 			return result;
 		}
-		
+
 		@Override
 		public int hashCode() {
 			int result = 17;
@@ -117,9 +149,47 @@ public class LeetCode130 {
 			return result;
 		}
 
+		@Override
+		public String toString() {
+			return "Coordinate [x=" + x + ", y=" + y + "]";
+		}
+
+	}
+	
+	public char[][] generateInput(String input) {
+		input = input.substring(1, input.length() - 1);
+		String[] inputArr = input.split(",");
+		int rowNum = inputArr.length;
+		int columnNum = inputArr[0].length() - 2;
+		char[][] output = new char[rowNum][columnNum];
+		for (int j = 0; j < rowNum; j++) {
+			for(int i = 1; i < columnNum + 1; i++) {
+				char temp = inputArr[j].charAt(i);
+				output[j][i - 1] = temp;
+			}
+		}
+		
+		for (char[] cs : output) {
+			for (char c : cs) {
+				System.out.print(c + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+		
+		return output;
 	}
 
 	public static void main(String[] args) {
+		LeetCode130 leetCode130 = new LeetCode130();
+		char[][] test = leetCode130.generateInput("[\"OXOOXX\",\"OXXXOX\",\"XOOXOO\",\"XOXXXX\",\"OOXOXX\",\"XXOOOO\"]");
+		leetCode130.solve(test);
+		for (char[] cs : test) {
+			for (char c : cs) {
+				System.out.print(c + " ");
+			}
+			System.out.println();
+		}
 	}
 
 }
