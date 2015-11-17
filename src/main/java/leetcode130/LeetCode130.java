@@ -62,6 +62,18 @@ public class LeetCode130 {
 								}
 							}
 						}
+						
+						Coordinate left = center.left();
+						if (left.y >= 0
+								&& board[left.x][left.y] == 'O') {
+							boolean isNotContain = next.add(left);
+							if (isNotContain) {
+								queue.add(left);
+								if (isConvert && left.y == 0) {
+									isConvert = false;
+								}
+							}
+						}
 
 						Coordinate down = center.down();
 						if (down.x < rowNum && board[down.x][down.y] == 'O') {
@@ -73,7 +85,19 @@ public class LeetCode130 {
 								}
 							}
 						}
+						
+						Coordinate up = center.up();
+						if (up.x >= 0 && board[up.x][up.y] == 'O') {
+							boolean isNotContain = next.add(up);
+							if (isNotContain) {
+								queue.add(up);
+								if (isConvert && up.x == 0) {
+									isConvert = false;
+								}
+							}
+						}
 					}
+					
 
 					if (isConvert) {
 						for (Coordinate coordinate2 : next) {
@@ -119,9 +143,17 @@ public class LeetCode130 {
 		public Coordinate right() {
 			return new Coordinate(x, y + 1);
 		}
+		
+		public Coordinate left() {
+			return new Coordinate(x, y - 1);
+		}
 
 		public Coordinate down() {
 			return new Coordinate(x + 1, y);
+		}
+		
+		public Coordinate up() {
+			return new Coordinate(x - 1, y);
 		}
 
 		@Override
@@ -162,10 +194,10 @@ public class LeetCode130 {
 		int rowNum = inputArr.length;
 		int columnNum = inputArr[0].length() - 2;
 		char[][] output = new char[rowNum][columnNum];
-		for (int j = 0; j < rowNum; j++) {
-			for(int i = 1; i < columnNum + 1; i++) {
-				char temp = inputArr[j].charAt(i);
-				output[j][i - 1] = temp;
+		for (int i = 0; i < rowNum; i++) {
+			for(int j = 1; j < columnNum + 1; j++) {
+				char temp = inputArr[i].charAt(j);
+				output[i][j - 1] = temp;
 			}
 		}
 		
