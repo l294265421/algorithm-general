@@ -40,9 +40,9 @@ public class LevenshteinDistance {
     
     /**
      * 获得一条最短编辑路径（最短编辑路径可能存在多条）
-     * @param word1
-     * @param word2
-     * @param distance
+     * @param word1 字符串1
+     * @param word2 字符串2
+     * @param distance 编辑距离矩阵
      * @return
      */
     public static EditPath getOnePath(String word1, String word2, int[][] distance) {
@@ -89,10 +89,49 @@ public class LevenshteinDistance {
 		return editPath;
 	}
     
+    /**
+     * 根据word1到word2的一条最短编辑距离路径对齐word1和word2
+     * @param word1 字符串1
+     * @param word2 字符串2
+     * @param editPath word1到word2的一条最短编辑路径
+     */
+    public static AlignStringPair align(String word1, String word2, EditPath editPath) {
+    	List<Station> stationList = editPath.getStationList();
+    	int size = stationList.size();
+    	
+    	Station now = stationList.get(0);
+    	StringBuilder newWord1 = new StringBuilder();
+    	StringBuilder newWord2 = new StringBuilder();
+    	for(int i = 1; i <= size - 1; i++) {
+    		Station next = stationList.get(i);
+    		int iMinus = now.getI() - next.getI();
+    		int jMinus = now.getJ() - next.getJ();
+    		
+    		// 插入
+    		if (iMinus == 0 && jMinus == 1) {
+				newWord1.append('_');
+				newWord2.append(word2.charAt(now.getJ() - 1));
+			// 删除
+			} else if (iMinus == 1 && jMinus == 0) {
+				newWord1.append(word1.charAt(now.getI() - 1));
+				newWord2.append('_');
+			// 相等或者修改
+			} else {
+				newWord1.append(word1.charAt(now.getI() - 1));
+				newWord2.append(word2.charAt(now.getJ() - 1));
+			}
+    		now = next;
+    	}
+    	
+    	AlignStringPair alignStringPair = new AlignStringPair(
+    			newWord1.reverse().toString(), newWord2.reverse().toString());
+    	return alignStringPair;
+	}
+    
 	
 	public static void main(String[] args) {
 //		int[][] test = new int[][] {{1,2,3},{4,5,6}};
-//		System.out.println(test[1][2]);
+//		Printer.print2DArray(test);
 		
 		String word1 = "XGYXYXYX";
 		String word2 = "XYXYXYTX";
@@ -103,6 +142,10 @@ public class LevenshteinDistance {
 			}
 			System.out.println();
 		}
-		System.out.println(LevenshteinDistance.getOnePath(word1, word2, test));
+		EditPath editPath = LevenshteinDistance.getOnePath(word1, word2, test);
+		System.out.println(editPath);
+		AlignStringPair alignStringPair = LevenshteinDistance.align(word1, word2, editPath);
+		System.out.println(alignStringPair.getWord1());
+		System.out.println(alignStringPair.getWord2());
 	}
 }

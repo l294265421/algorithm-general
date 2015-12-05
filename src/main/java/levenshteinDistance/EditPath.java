@@ -3,7 +3,8 @@ package levenshteinDistance;
 import java.util.List;
 
 /**
- * 从一个字符串编辑为另一个字符串的整个路径
+ * 从一个字符串编辑为另一个字符串的整个路径，实际上是指，在利用动态规划
+ * 求字符串最短编辑距离的过程中产生的矩阵的坐标序列
  * @author liyuncong
  *
  */
