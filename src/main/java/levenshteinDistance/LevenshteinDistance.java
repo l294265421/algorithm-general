@@ -61,27 +61,33 @@ public class LevenshteinDistance {
 				int thisDistance = distance[i][j];
 				
 				// 删除（不为空才能删出）
-				int up = distance[i - 1][j];
-				if (up + 1 == thisDistance && i > 0) {
-					i = i - 1;
-					stationList.add(new Station(i, j));
-					continue;
+				if (i > 0) {
+					int up = distance[i - 1][j];
+					if (up + 1 == thisDistance) {
+						i = i - 1;
+						stationList.add(new Station(i, j));
+						continue;
+					}
 				}
 				
 				// 插入（word2不为空才需要插入）
-				int left = distance[i][j - 1];
-				if (left + 1 == thisDistance && j > 0) {
-					j = j - 1;
-					stationList.add(new Station(i, j));
-					continue;
+				if (j > 0) {
+					int left = distance[i][j - 1];
+					if (left + 1 == thisDistance) {
+						j = j - 1;
+						stationList.add(new Station(i, j));
+						continue;
+					}
 				}
 				
 				// 修改(word1和word2都不为空才需要修改)
-				int leftUp = distance[i - 1][j - 1];
-				if (leftUp + 1 == thisDistance && i > 0 && j > 0) {
-					i = i - 1;
-					j = j - 1;
-					stationList.add(new Station(i, j));
+				if (i > 0 && j > 0) {
+					int leftUp = distance[i - 1][j - 1];
+					if (leftUp + 1 == thisDistance) {
+						i = i - 1;
+						j = j - 1;
+						stationList.add(new Station(i, j));
+					}
 				}
 			}
 		}
