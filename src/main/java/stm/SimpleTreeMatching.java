@@ -54,7 +54,7 @@ public class SimpleTreeMatching {
 			for(int j = 1; j < bChildNum + 1; j++) {
 				w[i][j] = simpleTreeMatching(aChild.get(i), bChild.get(j));
 				m[i][j] = Math.max(Math.max(m[i][j-1], m[i - 1][j]), 
-						w[i][j]);
+						m[i-1][j-1] + w[i][j]);
 			}
 		}
 		ElementPairAssociateMW elementPairAssociateMW = new ElementPairAssociateMW(A, B, m, w);
