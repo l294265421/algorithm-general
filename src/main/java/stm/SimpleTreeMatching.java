@@ -30,6 +30,12 @@ public class SimpleTreeMatching {
 	 * @return
 	 */
 	public int simpleTreeMatching(Element A, Element B) {
+		System.out.println("A: " + A);
+		System.out.println("B: " + B);
+		if(A.toString().contains("食药监局通报抽检结果：1批次肉制品2批次炒货不合格</a></li>")) {
+			System.out.println(A);
+		}
+		System.out.println("-----------------------------");
 		String aTag = A.tagName();
 		String bTag = B.tagName();
 		if (!aTag.equals(bTag)) {
@@ -40,6 +46,10 @@ public class SimpleTreeMatching {
 		Elements bChild = B.children();
 		int aChildNum = aChild.size();
 		int bChildNum = bChild.size();
+		if (aChildNum == 0 || bChildNum == 0) {
+			return 1;
+		}
+		
 		int[][] m = new int[aChildNum + 1][bChildNum + 1];
 		int[][] w = new int[aChildNum + 1][bChildNum + 1];
 		// 当A没有子树时，只有０个匹配
@@ -52,7 +62,7 @@ public class SimpleTreeMatching {
 		}
 		for(int i = 1; i < aChildNum + 1; i++) {
 			for(int j = 1; j < bChildNum + 1; j++) {
-				w[i][j] = simpleTreeMatching(aChild.get(i), bChild.get(j));
+				w[i][j] = simpleTreeMatching(aChild.get(i - 1), bChild.get(j - 1));
 				m[i][j] = Math.max(Math.max(m[i][j-1], m[i - 1][j]), 
 						m[i-1][j-1] + w[i][j]);
 			}
@@ -60,6 +70,37 @@ public class SimpleTreeMatching {
 		ElementPairAssociateMW elementPairAssociateMW = new ElementPairAssociateMW(A, B, m, w);
 		elementPairAssociateMWList.addElementPairAssociateMW(elementPairAssociateMW);
 		return m[aChildNum][bChildNum] + 1;
+	}
+	
+	/**
+	 * 对两颗树的匹配分数做归一化处理；
+	 * @param A
+	 * @param B
+	 * @param matchNum
+	 * @return
+	 */
+	public double normalizedSimpleTreeMatching(Element A, Element B, int matchNum) {
+		return (matchNum * 2)/(getElementNum(A) + getElementNum(B));
+	}
+	
+	/**
+	 * 获得root的后代节点的个数（包含root）
+	 * @param root 根节点
+	 * @return
+	 */
+	private int getElementNum(Element root) {
+		if (root == null) {
+			return 0;
+		} else {
+			int num = 1;
+			Elements children = root.children();
+			int childNum = children.size();
+			num += childNum;
+			for (Element element : children) {
+				num += getElementNum(element);
+			}
+			return num;
+		}
 	}
 	
 	/**
