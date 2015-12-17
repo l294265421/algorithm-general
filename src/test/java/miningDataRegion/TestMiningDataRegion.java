@@ -14,7 +14,10 @@ public class TestMiningDataRegion {
 		Document rootElement = Jsoup.parse(new URL("http://politics.people.com.cn/GB/1027/index.html"), 5000);
 		MiningDataRegionForNews miningDataRegion = new MiningDataRegionForNews();
 		List<DataRegion> dataRegions = miningDataRegion.MDR(rootElement.body(), 0.75);
-		System.out.println(dataRegions.get(0));
+		System.out.println(dataRegions.get(4).getElements().size());
+		for (DataRegion dataRegion : dataRegions) {
+			System.out.println(dataRegion);
+		}
 	}
 
 }

@@ -8,6 +8,11 @@ import org.jsoup.select.Elements;
 
 import stm.SimpleTreeMatching;
 
+/**
+ * 从新闻列表页中挖掘出数据区域
+ * @author liyuncong
+ *
+ */
 public class MiningDataRegionForNews {
 	// 数据区域中包含的最小广义节点数
 	private int memberMinNumLimit = 8;
@@ -16,8 +21,19 @@ public class MiningDataRegionForNews {
 	// 数据区域的最大深度
 	private int dataRegionMaxDepth = 5;
 	
+	public MiningDataRegionForNews() {
+	}
+	
+	public MiningDataRegionForNews(int memberMinNumLimit,
+			int dataRegionMinDepth, int dataRegionMaxDepth) {
+		super();
+		this.memberMinNumLimit = memberMinNumLimit;
+		this.dataRegionMinDepth = dataRegionMinDepth;
+		this.dataRegionMaxDepth = dataRegionMaxDepth;
+	}
+
 	/**
-	 * 新闻列表页中数据区域挖掘
+	 * 从新闻列表页中挖掘数据区域
 	 * @param node 根节点
 	 * @param threshold 广义节点的相似度阈值
 	 */
@@ -70,10 +86,10 @@ public class MiningDataRegionForNews {
 					if (candidateNum >= this.memberMinNumLimit) {
 						DataRegion dataRegion = new DataRegion(candidateElements);
 						dataRegions.add(dataRegion);
-						candidateElements.clear();
+						candidateElements = new LinkedList<Element>();
 					} else {
 						uncovered.addAll(candidateElements);
-						candidateElements.clear();
+						candidateElements = new LinkedList<Element>();
 					}
 					// 新起点
 					if (childNum - i < this.memberMinNumLimit) {
@@ -96,10 +112,10 @@ public class MiningDataRegionForNews {
 			if (candidateNum >= this.memberMinNumLimit) {
 				DataRegion dataRegion = new DataRegion(candidateElements);
 				dataRegions.add(dataRegion);
-				candidateElements.clear();
+				candidateElements = new LinkedList<Element>();
 			} else {
 				uncovered.addAll(candidateElements);
-				candidateElements.clear();
+				candidateElements = new LinkedList<Element>();
 			}
 			
 			break;
@@ -149,9 +165,5 @@ public class MiningDataRegionForNews {
 		Elements elements = root.getElementsByTag(tagName);
 		return !(elements.size() == 0);
 	}
-	
-	public static void main(String[] args) {
-		
-	}
-	
+
 }

@@ -30,12 +30,6 @@ public class SimpleTreeMatching {
 	 * @return
 	 */
 	public int simpleTreeMatching(Element A, Element B) {
-		System.out.println("A: " + A);
-		System.out.println("B: " + B);
-		if(A.toString().contains("食药监局通报抽检结果：1批次肉制品2批次炒货不合格</a></li>")) {
-			System.out.println(A);
-		}
-		System.out.println("-----------------------------");
 		String aTag = A.tagName();
 		String bTag = B.tagName();
 		if (!aTag.equals(bTag)) {
