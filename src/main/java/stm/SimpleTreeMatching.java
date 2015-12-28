@@ -74,7 +74,10 @@ public class SimpleTreeMatching {
 	 * @return
 	 */
 	public double normalizedSimpleTreeMatching(Element A, Element B, int matchNum) {
-		return (matchNum * 2)/(getElementNum(A) + getElementNum(B));
+		int aNum = getElementNum(A);
+		int bNum = getElementNum(B);
+		double normalizedScore = (double) (matchNum * 2) / (aNum + bNum);
+		return normalizedScore;
 	}
 	
 	/**
@@ -88,8 +91,6 @@ public class SimpleTreeMatching {
 		} else {
 			int num = 1;
 			Elements children = root.children();
-			int childNum = children.size();
-			num += childNum;
 			for (Element element : children) {
 				num += getElementNum(element);
 			}

@@ -9,7 +9,11 @@ import org.jsoup.select.Elements;
 import stm.SimpleTreeMatching;
 
 /**
- * 从新闻列表页中挖掘出数据区域
+ * 从新闻列表页中挖掘出数据区域;
+ * 经过观察，新闻列表页中包含详情页url的数据区域具有下列特点：
+ * 1. 深度较浅
+ * 2. 其中的广义节点只含一个标签节点
+ * 3. 广义节点数目较多
  * @author liyuncong
  *
  */
@@ -19,7 +23,7 @@ public class MiningDataRegionForNews {
 	// 数据区域的最小深度
 	private int dataRegionMinDepth = 2;
 	// 数据区域的最大深度
-	private int dataRegionMaxDepth = 5;
+	private int dataRegionMaxDepth = 8;
 	
 	public MiningDataRegionForNews() {
 	}
@@ -38,6 +42,11 @@ public class MiningDataRegionForNews {
 	 * @param threshold 广义节点的相似度阈值
 	 */
 	public List<DataRegion> MDR(Element root, double threshold) {
+		if (root.tagName().equals("ul")) {
+			System.out.println(root);
+			System.out.println("--------------------------------------");
+		}
+		
 		// 挖掘得到的数据区域
 		List<DataRegion> dataRegions = new LinkedList<DataRegion>();
 		int depth = treeDepth(root);
