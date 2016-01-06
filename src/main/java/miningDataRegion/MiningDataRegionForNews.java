@@ -49,7 +49,7 @@ public class MiningDataRegionForNews {
 		
 		// 挖掘得到的数据区域
 		List<DataRegion> dataRegions = new LinkedList<DataRegion>();
-		int depth = treeDepth(root);
+		int depth = Tools.treeDepth(root);
 		// 没有包含在数据区域里元素
 		List<Element> uncovered = new LinkedList<Element>();
 		// 新闻列表区域的深度必须大于等于2，小于等于5
@@ -142,37 +142,4 @@ public class MiningDataRegionForNews {
 		return dataRegions;
 	}
 	
-	/**
-	 * 获取树的深度；对于这个应用，这里可以做优化：直接一次性获得所有节点的深度；
-	 * @param root 根节点
-	 * @return 树的深度
-	 */
-	private int treeDepth(Element root) {
-		if (root == null) {
-			return 0;
-		} else {
-			int maxDepth = 0;
-			Elements children = root.children();
-			int childrenNum = children.size();
-			for(int i = 0; i < childrenNum; i++) {
-				int thisDepth = treeDepth(children.get(i));
-				if (thisDepth > maxDepth) {
-					maxDepth = thisDepth;
-				}
-			}
-			return maxDepth + 1;
-		}
-	}
-	
-	/**
-	 * 判断root及后代节点中是否有节点名为tagName的元素；
-	 * @param root 根节点
-	 * @param tagName 标签名
-	 * @return
-	 */
-	private boolean isContainElement(Element root, String tagName) {
-		Elements elements = root.getElementsByTag(tagName);
-		return !(elements.size() == 0);
-	}
-
 }

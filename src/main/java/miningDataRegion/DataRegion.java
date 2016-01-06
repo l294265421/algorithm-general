@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.jsoup.nodes.Element;
 
+/**
+ * html列表页中的数据区域
+ * @author liyuncong
+ *
+ */
 public class DataRegion {
 	private List<Element> elements;
 

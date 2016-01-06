@@ -1,14 +1,18 @@
 package zdzxls;
 
+/**
+ * 基于这样一个事实，最大和子序列要么在中点左边，要么在中点右边，要么
+ * 包含中点（中点是一个虚的点，不是真是存在的，比如i和i+1之间）
+ * @author liyuncong
+ *
+ */
 public class MaxSubSum3 implements MaxSubSum {
 
 	public int maxSubSum(int[] a) {
-		// TODO Auto-generated method stub
 		return maxSubSum(a, 0, a.length - 1);
 	}
 
 	public int maxSubSum(int[] a, int left, int right) {
-		// TODO Auto-generated method stub
 		if (left == right) {
 			if (a[left] > 0) {
 				return a[left];
