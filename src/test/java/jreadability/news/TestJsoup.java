@@ -1,4 +1,4 @@
-package com.wuman.jreadability;
+package jreadability.news;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

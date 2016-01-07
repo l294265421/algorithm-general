@@ -1,4 +1,4 @@
-package com.wuman.jreadability;
+package jreadability.news;
 
 import java.util.Iterator;
 import java.util.LinkedList;

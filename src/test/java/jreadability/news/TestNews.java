@@ -1,4 +1,4 @@
-package com.wuman.jreadability;
+package jreadability.news;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

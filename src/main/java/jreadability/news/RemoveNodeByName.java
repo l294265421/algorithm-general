@@ -2,6 +2,11 @@ package jreadability.news;
 
 import org.jsoup.nodes.Node;
 
+/**
+ * 
+ * @author liyuncong
+ *
+ */
 public class RemoveNodeByName implements NodeOperate {
 	private String nodeNameToRemove;
 
