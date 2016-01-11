@@ -1,5 +1,6 @@
 package miningDataRegion;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class MiningDataRegionForNews {
 	private int dataRegionMinDepth = 2;
 	// 数据区域的最大深度
 	private int dataRegionMaxDepth = 8;
+	private int aTagNumInRecord = 1;
+	// a标签中最小锚文本长度
+	private int minAnchorTextLen = 8;
 	
 	public MiningDataRegionForNews() {
 	}
@@ -42,11 +46,6 @@ public class MiningDataRegionForNews {
 	 * @param threshold 广义节点的相似度阈值
 	 */
 	public List<DataRegion> MDR(Element root, double threshold) {
-		if (root.tagName().equals("ul")) {
-			System.out.println(root);
-			System.out.println("--------------------------------------");
-		}
-		
 		// 挖掘得到的数据区域
 		List<DataRegion> dataRegions = new LinkedList<DataRegion>();
 		int depth = Tools.treeDepth(root);
@@ -140,6 +139,32 @@ public class MiningDataRegionForNews {
 		}
 		
 		return dataRegions;
+	}
+	
+	/**
+	 * 用一些观察的结果过滤掉一些数据区域
+	 */
+	public void filterDataRegion(List<DataRegion> dataRegions) {
+		Iterator<DataRegion> it = dataRegions.iterator();
+		outerLoop: while (it.hasNext()) {
+			DataRegion dataRegion = it.next();
+			List<Element> elements = dataRegion.getElements();
+			for (Element element : elements) {
+				Elements aTags = element.getElementsByTag("a");
+				// 一个数据区域里的每个记录都应该只包含一个超链接
+				if (aTags.size() != aTagNumInRecord) {
+					it.remove();
+					continue outerLoop;
+				}
+				
+				// 一个数据区域的每一个a标签的锚文本长度应该大于
+				Element aTag = aTags.first();
+				if (aTag.text().length() < minAnchorTextLen) {
+					it.remove();
+					continue outerLoop;
+				}
+			}
+		}
 	}
 	
 }
