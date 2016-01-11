@@ -35,7 +35,7 @@ public class Test {
 	
 	@org.junit.Test
 	public void test2() throws IOException {
-		URL url = new URL("http://news.66wz.com/system/2016/01/07/104685574.shtml");
+		URL url = new URL("http://politics.people.com.cn/n1/2015/1231/c1001-28000609.html");
 		ReadabilityNews5 readability = new ReadabilityNews5(url, 5000, null);
 		readability.init();
 		String cleanHtml = readability.outerHtml();

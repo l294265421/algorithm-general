@@ -9,34 +9,26 @@ import jreadability.news.DOMUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
+import org.junit.Test;
 
 public class TestJsoup {
 
-	public static void main(String[] args) {
-		URL url;
-		try {
-			url = new URL(
-					"http://news.qq.com/a/20151029/008755.htm");
-			Document document = Jsoup.parse(url, 10000);
-			List<TextNode> textNodeList = DOMUtil.getAllTextNodes(document.body());
-			System.out.println(textNodeList.size());
-			for (TextNode textNode : textNodeList) {
-				String text = textNode.text().trim();
-				int len = text.length();
-				if (len != 0) {
-					System.out.println(textNode.text().trim());
-				}
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String test = null;
-		String test1 = "32";
-		String teString = test + test1;
-		System.out.println(teString);
+	@Test
+	public void testCreateElement() {
+		Document document = new Document("");
+		Element element = document.createElement("div");
+		element.append("<div style=\"\" class=\"position\">温州网</div>");
+		System.out.println(element.child(0));
+	}
+	
+	@Test
+	public void testElementHasAttr() {
+		Document document = new Document("");
+		Element element = document.createElement("div");
+		element.append("<div style=\"\" class=\"position\">温州网</div>");
+		System.out.println(element.child(0).hasAttr("id"));
+		System.out.println(element.child(0).attr("id"));
 	}
 }

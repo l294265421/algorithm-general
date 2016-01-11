@@ -115,6 +115,7 @@ public class ReadabilityNews5 {
 	 * @param preserveUnlikelyCandidates
 	 */
 	private void init(boolean preserveUnlikelyCandidates) {
+		Helper.writeStringToFile(mDocument.outerHtml(), "D:/test/news.html", "gbk");
 		// 第一部分
 		
     	Element body = mDocument.body();
@@ -672,16 +673,6 @@ public class ReadabilityNews5 {
 	 * )
 	 */
 	protected void prepDocument() {
-		/**
-		 * In some cases a body element can't be found (if the HTML is totally
-		 * hosed for example) so we create a new body node and append it to the
-		 * document. （
-		 * 在某些情况下，body元素不能被找到，因此我们创建一个新的body节点，并把这个节点 附到document上）
-		 */
-		if (mDocument.body() == null) {
-			mDocument.appendElement("body");
-		}
-
 		/* Remove all scripts */
 		// 移除所有脚本
 		Elements elementsToRemove = mDocument.getElementsByTag("script");
