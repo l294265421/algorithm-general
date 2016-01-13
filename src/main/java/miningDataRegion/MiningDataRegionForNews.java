@@ -4,9 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import parsewebpage.ParseWebPage;
 import stm.SimpleTreeMatching;
 
 /**
@@ -15,43 +17,42 @@ import stm.SimpleTreeMatching;
  * 1. 深度较浅
  * 2. 其中的广义节点只含一个标签节点
  * 3. 广义节点数目较多
+ * 
+ * 可优化项：
+ * 1.发现其中的“下一页”
  * @author liyuncong
  *
  */
-public class MiningDataRegionForNews {
-	// 数据区域中包含的最小广义节点数
-	private int memberMinNumLimit = 8;
+public class MiningDataRegionForNews extends ParseWebPage{
 	// 数据区域的最小深度
 	private int dataRegionMinDepth = 2;
 	// 数据区域的最大深度
 	private int dataRegionMaxDepth = 8;
+	
+	// 数据区域中包含的最小广义节点数
+	private int memberMinNumLimit = 8;
+	// 广义节点的相似度阈值
+	private double threshold = 0.75;
+	
+	// 一个记录中的a标签数
 	private int aTagNumInRecord = 1;
 	// a标签中最小锚文本长度
 	private int minAnchorTextLen = 8;
 	
 	public MiningDataRegionForNews() {
 	}
-	
-	public MiningDataRegionForNews(int memberMinNumLimit,
-			int dataRegionMinDepth, int dataRegionMaxDepth) {
-		super();
-		this.memberMinNumLimit = memberMinNumLimit;
-		this.dataRegionMinDepth = dataRegionMinDepth;
-		this.dataRegionMaxDepth = dataRegionMaxDepth;
-	}
 
 	/**
 	 * 从新闻列表页中挖掘数据区域
 	 * @param node 根节点
-	 * @param threshold 广义节点的相似度阈值
 	 */
-	public List<DataRegion> MDR(Element root, double threshold) {
+	private List<DataRegion> MDR(Element root) {
 		// 挖掘得到的数据区域
 		List<DataRegion> dataRegions = new LinkedList<DataRegion>();
 		int depth = Tools.treeDepth(root);
 		// 没有包含在数据区域里元素
 		List<Element> uncovered = new LinkedList<Element>();
-		// 新闻列表区域的深度必须大于等于2，小于等于5
+		
 		int whichCase = -1;
 		if (depth < this.dataRegionMinDepth) {
 			whichCase = 1;
@@ -74,7 +75,6 @@ public class MiningDataRegionForNews {
 				for(int i = 0; i < childNum; i++) {
 					uncovered.add(children.get(i));
 				}
-				
 				break;
 			}
 			
@@ -92,6 +92,7 @@ public class MiningDataRegionForNews {
 				if (normalizedScore < threshold) {
 					int candidateNum = candidateElements.size();
 					if (candidateNum >= this.memberMinNumLimit) {
+						// 得到的相似元素个数够了，就整体当作一个数据区域对待
 						DataRegion dataRegion = new DataRegion(candidateElements);
 						dataRegions.add(dataRegion);
 						candidateElements = new LinkedList<Element>();
@@ -101,6 +102,7 @@ public class MiningDataRegionForNews {
 					}
 					// 新起点
 					if (childNum - i < this.memberMinNumLimit) {
+						// 剩余元素个数总和都不足构成一个数据区域，就全部当作uncovered
 						for(int j = i; j < childNum; j++) {
 							uncovered.add(children.get(j));
 						}
@@ -108,6 +110,7 @@ public class MiningDataRegionForNews {
 						break outSwith;
 					} else {
 						lastElement = nowElement;
+						candidateElements.add(lastElement);
 					}
 					
 				} else {
@@ -135,7 +138,7 @@ public class MiningDataRegionForNews {
 		
 		// 递归处理没有被包含在数据区域里的节点
 		for (Element element : uncovered) {
-			dataRegions.addAll(MDR(element, threshold));
+			dataRegions.addAll(MDR(element));
 		}
 		
 		return dataRegions;
@@ -144,7 +147,7 @@ public class MiningDataRegionForNews {
 	/**
 	 * 用一些观察的结果过滤掉一些数据区域
 	 */
-	public void filterDataRegion(List<DataRegion> dataRegions) {
+	private void filterDataRegion(List<DataRegion> dataRegions) {
 		Iterator<DataRegion> it = dataRegions.iterator();
 		outerLoop: while (it.hasNext()) {
 			DataRegion dataRegion = it.next();
@@ -157,7 +160,7 @@ public class MiningDataRegionForNews {
 					continue outerLoop;
 				}
 				
-				// 一个数据区域的每一个a标签的锚文本长度应该大于
+				// 一个数据区域的每一个a标签的锚文本长度应该不小于指定的最小长度
 				Element aTag = aTags.first();
 				if (aTag.text().length() < minAnchorTextLen) {
 					it.remove();
@@ -166,5 +169,70 @@ public class MiningDataRegionForNews {
 			}
 		}
 	}
+
+	@Override
+	protected Object innerParse(Document webpage) {
+		List<DataRegion> dataRegions = MDR(webpage.body());
+		filterDataRegion(dataRegions);
+		return dataRegions;
+	}
 	
+	public int getDataRegionMinDepth() {
+		return dataRegionMinDepth;
+	}
+
+
+	public void setDataRegionMinDepth(int dataRegionMinDepth) {
+		this.dataRegionMinDepth = dataRegionMinDepth;
+	}
+
+
+	public int getDataRegionMaxDepth() {
+		return dataRegionMaxDepth;
+	}
+
+
+	public void setDataRegionMaxDepth(int dataRegionMaxDepth) {
+		this.dataRegionMaxDepth = dataRegionMaxDepth;
+	}
+
+
+	public int getMemberMinNumLimit() {
+		return memberMinNumLimit;
+	}
+
+
+	public void setMemberMinNumLimit(int memberMinNumLimit) {
+		this.memberMinNumLimit = memberMinNumLimit;
+	}
+
+
+	public double getThreshold() {
+		return threshold;
+	}
+
+
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+	}
+
+
+	public int getaTagNumInRecord() {
+		return aTagNumInRecord;
+	}
+
+
+	public void setaTagNumInRecord(int aTagNumInRecord) {
+		this.aTagNumInRecord = aTagNumInRecord;
+	}
+
+
+	public int getMinAnchorTextLen() {
+		return minAnchorTextLen;
+	}
+
+
+	public void setMinAnchorTextLen(int minAnchorTextLen) {
+		this.minAnchorTextLen = minAnchorTextLen;
+	}
 }

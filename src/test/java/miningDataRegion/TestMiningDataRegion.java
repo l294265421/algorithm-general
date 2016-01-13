@@ -17,19 +17,17 @@ public class TestMiningDataRegion {
 	public static void main(String[] args) throws MalformedURLException, IOException {
 		// String urlStr = "http://politics.people.com.cn/GB/1027/index.html";
 		String urlStr = "http://finance.people.com.cn/GB/153179/153522/index.html";
+		URL url = new URL(urlStr);
 		
-		Document rootElement = Jsoup.parse(new URL(urlStr), 5000);
-		Tools.prepDocument(rootElement);
 		MiningDataRegionForNews miningDataRegion = new MiningDataRegionForNews();
-		List<DataRegion> dataRegions = miningDataRegion.MDR(rootElement.body(), 0.75);
-//		miningDataRegion.filterDataRegion(dataRegions);
+		@SuppressWarnings("unchecked")
+		List<DataRegion> dataRegions = (List<DataRegion>) miningDataRegion.parse(url);
 		
 		int num = dataRegions.size();
 		for(int i = 0; i < num; i++) {
-//			Helper.writeStringToFile(dataRegions.get(i).toString(),
-//					"D:\\test\\" + i + ".html");
 			for(Element e : dataRegions.get(i).getElements()) {
 				System.out.println(e);
+				System.out.println(e.getElementsByTag("a").first().attr("abs:href"));;
 			}
 			System.out.println("--------------------------------------");
 
