@@ -32,6 +32,16 @@ public abstract class ParseWebPage {
 		return parse(webpage);
 	}
 	
+	public Object parse(File in, String charsetName, String baseUri) {
+		Document webpage = null;
+		try {
+			webpage = Jsoup.parse(in, charsetName, baseUri);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return parse(webpage);
+	}
+	
 	public Object parse(String html, String baseUri) {
 		Document webpage = Jsoup.parse(html, baseUri);
 		return parse(webpage);
