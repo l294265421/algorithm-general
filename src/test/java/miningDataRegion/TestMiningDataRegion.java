@@ -1,5 +1,6 @@
 package miningDataRegion;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,12 +17,14 @@ public class TestMiningDataRegion {
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
 		// String urlStr = "http://politics.people.com.cn/GB/1027/index.html";
-		String urlStr = "http://finance.people.com.cn/GB/153179/153522/index.html";
+		String urlStr = "http://military.people.com.cn/GB/52936/index.html";
 		URL url = new URL(urlStr);
 		
 		MiningDataRegionForNews miningDataRegion = new MiningDataRegionForNews();
 		@SuppressWarnings("unchecked")
-		List<DataRegion> dataRegions = (List<DataRegion>) miningDataRegion.parse(url);
+		List<DataRegion> dataRegions = (List<DataRegion>) miningDataRegion.
+			parse(new File("D:\\test\\本网原创--军事--人民网.htm"), 
+					"utf-8", urlStr);
 		
 		int num = dataRegions.size();
 		for(int i = 0; i < num; i++) {
