@@ -24,8 +24,8 @@ public class Test {
 	@org.junit.Test
 	public void test1() throws IOException {
 		ReadabilityNews5 readability = new ReadabilityNews5(
-				new File("D:\\test\\温州网\\健康\\摆架子其实是在心理上绑架自己 - 温州健康网 - 温州第一健康资讯平台 - 温州网.htm"), 
-				"gbk", 
+				new File("D:\\program\\bigdata\\people.com.cn\\finance.people.com.cn\\0a5e49e68fb6ec94a8659e76a52be4e1.html"), 
+				"utf-8", 
 				"http://www.cnblogs.com/ybwang/archive/2011/10/04/lastOrderTraverse.html", 
 				null);
 		readability.init();

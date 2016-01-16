@@ -108,7 +108,7 @@ public abstract class ParseWebPage {
 	 * @param tag 标签名
 	 * @return
 	 */
-	private Elements getElementsByTag(Element e, String tag) {
+	protected Elements getElementsByTag(Element e, String tag) {
 		Elements es = e.getElementsByTag(tag);
 		es.remove(e);
 		return es;

@@ -1,8 +1,11 @@
-package miningDataRegion;
+package parse.news.listpage;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import miningDataRegion.DataRegion;
+import miningDataRegion.Tools;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +26,7 @@ import stm.SimpleTreeMatching;
  * @author liyuncong
  *
  */
-public class MiningDataRegionForNews extends ParseWebPage{
+public class MiningDataRegion extends ParseWebPage{
 	// 数据区域的最小深度
 	private int dataRegionMinDepth = 2;
 	// 数据区域的最大深度
@@ -39,7 +42,7 @@ public class MiningDataRegionForNews extends ParseWebPage{
 	// a标签中最小锚文本长度
 	private int minAnchorTextLen = 8;
 	
-	public MiningDataRegionForNews() {
+	public MiningDataRegion() {
 	}
 
 	/**

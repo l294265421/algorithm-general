@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import parse.news.listpage.MiningDataRegion;
 import tools.Helper;
 
 public class TestMiningDataRegion {
@@ -20,7 +21,7 @@ public class TestMiningDataRegion {
 		String urlStr = "http://military.people.com.cn/GB/52936/index.html";
 		URL url = new URL(urlStr);
 		
-		MiningDataRegionForNews miningDataRegion = new MiningDataRegionForNews();
+		MiningDataRegion miningDataRegion = new MiningDataRegion();
 		@SuppressWarnings("unchecked")
 		List<DataRegion> dataRegions = (List<DataRegion>) miningDataRegion.
 			parse(new File("D:\\test\\本网原创--军事--人民网.htm"), 
