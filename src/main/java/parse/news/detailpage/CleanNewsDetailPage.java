@@ -65,30 +65,55 @@ public class CleanNewsDetailPage extends ParseWebPage {
 		}
 		
 		// 2.删除获得节点中不要想的内容
+		
 		// 构造从newsTitle节点到closestCommonAncestor节点的路径
-		List<Node> ancestorsOfNewsTitle = new LinkedList<Node>();
-     	Node ancestorOfTitle = newsTitle;
-     	while (ancestorOfTitle != closestCommonAncestor) {
-     		ancestorsOfNewsTitle.add(ancestorOfTitle);
-     		ancestorOfTitle = ancestorOfTitle.parent();
-		}
+		List<Node> ancestorsOfNewsTitle = path(newsTitle, 
+				closestCommonAncestor);
+		// 构造从newsText节点到closestCommonAncestor节点的路径
+    	List<Node> ancestorsOfNewsText = path(newsText, 
+    			closestCommonAncestor);
      	
-     	// 删除树中ancestorsOfNewsTitle这条路左面的所有节点
-     	DOMUtil.deleteLeftOrRight(ancestorsOfNewsTitle, "left");
+     	// 处理从标题节点到最近公共祖先节点这条路径左边的节点；
+     	processForeNewsTitle(ancestorsOfNewsTitle);
      	
-     	if (newsText != closestCommonAncestor) {
-     		// 构造从newsText节点到closestCommonAncestor节点的路径
-        	List<Node> ancestorsOfNewsText = new LinkedList<Node>();
-         	Node ancestorOfText = newsText;
-         	while (ancestorOfText != closestCommonAncestor) {
-         		ancestorsOfNewsText.add(ancestorOfText);
-         		ancestorOfText = ancestorOfText.parent();
-    		}
-         	
-     		// 删除树中ancestorsOfNewsText这条路右面的所有节点
-     		DOMUtil.deleteLeftOrRight(ancestorsOfNewsText, 
-     				"right");
-     		
+     	// 处理ancestorsOfNewsTitle和ancestorsOfNewsText之间的区域
+     	processAreaBetweenTitleAndText(ancestorsOfNewsTitle, 
+     			ancestorsOfNewsText);
+     	
+     	// 处理从正文节点到最近公共祖先节点这条路径右边的节点；
+     	processPostNewsText(ancestorsOfNewsText);
+     	
+     	
+     	Document document = wrapNodeToDocument(
+     			closestCommonAncestor);
+     	
+		return document;
+	}
+	
+	/**
+	 * 处理从标题节点到最近公共祖先节点这条路径左边的节点；
+	 * @param ancestorsOfNewsTitle 从newsTitle节点到
+	 * <br/>closestCommonAncestor节点的路径,不包含
+	 * <br/>closestCommonAncestor
+	 */
+	private void processForeNewsTitle(List<Node> 
+		ancestorsOfNewsTitle) {
+		// 删除树中ancestorsOfNewsTitle这条路左面的所有节点
+		DOMUtil.deleteLeftOrRight(ancestorsOfNewsTitle, "left");
+	}
+	
+	/**
+	 * 处理ancestorsOfNewsTitle和ancestorsOfNewsText之间的区域
+	 * @param ancestorsOfNewsTitle 从newsTitle节点到
+	 * <br/>closestCommonAncestor节点的路径,不包含
+	 * <br/>closestCommonAncestor
+	 * @param ancestorsOfNewsText 从newsText节点到
+	 * <br/>closestCommonAncestor节点的路径,不包含
+	 * <br/>closestCommonAncestor
+	 */
+	private void processAreaBetweenTitleAndText(List<Node> 
+		ancestorsOfNewsTitle, List<Node> ancestorsOfNewsText) {
+		if (ancestorsOfNewsText.size() != 0) {
      		// 删除在路径ancestorsOfNewsTitle和
           	// 路径ancestorsOfNewsText之间的区域
             // 中会影响页面显示且不想要的节点;
@@ -121,11 +146,41 @@ public class CleanNewsDetailPage extends ParseWebPage {
      	DOMUtil.deleteAllElementByTagName(ancestorsOfNewsTitle, 
      			ancestorsOfNewsText, "input");
 		}
-     	
-     	Document document = wrapNodeToDocument(
-     			closestCommonAncestor);
-     	
-		return document;
+	}
+	
+	/**
+	 * 处理从正文节点到最近公共祖先节点这条路径右边的节点；
+	 * @param ancestorsOfNewsText 从newsText节点到
+	 * <br/>closestCommonAncestor节点的路径,不包含
+	 * <br/>closestCommonAncestor
+	 */
+	private void processPostNewsText(List<Node> 
+		ancestorsOfNewsText) {
+		// 删除树中ancestorsOfNewsText这条路右面的所有节点
+ 		if (ancestorsOfNewsText.size() != 0) {
+ 			DOMUtil.deleteLeftOrRight(ancestorsOfNewsText, 
+ 	 				"right");
+		}
+	}
+	
+	/**
+	 * 获得树中从offspring到ancestor的路径。
+	 * @param offspring 后代节点
+	 * @param ancestor 祖先节点
+	 * @return 从后代节点到祖先节点的路径，包含offspring，不包含ancestor；
+	 * <br/>如果offspring和ancestor是同一个节点，就返回空链表；
+	 */
+	private List<Node> path(Node offspring , Node ancestor) {
+		List<Node> path = new LinkedList<Node>();
+		if (offspring == ancestor) {
+			return path;
+		}
+	 	Node cursor = offspring;
+     	while (cursor != ancestor) {
+     		path.add(cursor);
+     		cursor = cursor.parent();
+		}
+     	return path;
 	}
 	
 	/**
