@@ -190,11 +190,17 @@ public class CleanNewsDetailPage extends ParseWebPage {
 	 */
 	private Document wrapNodeToDocument(Node node) {
 		Document document = null;
-      	try {
-      		document = Jsoup.parse(new File("newsWebPageHead.html"), "utf-8");
-      	} catch (IOException e) {
-      		e.printStackTrace();
-      	}
+		StringBuilder newsWebPageTemplate = new StringBuilder();
+		newsWebPageTemplate.append("<!DOCTYPE html>");
+		newsWebPageTemplate.append("<html>");
+		newsWebPageTemplate.append("<head>");
+		newsWebPageTemplate.append("<meta charset=\"utf-8\"/>");
+		newsWebPageTemplate.append("<title>新闻网页模板</title>");
+		newsWebPageTemplate.append("</head>");
+		newsWebPageTemplate.append("<body>");
+		newsWebPageTemplate.append("</body>");
+		newsWebPageTemplate.append("</html>");
+      	document = Jsoup.parse(newsWebPageTemplate.toString());
        	if (node.nodeName().equals("body")) {
       		document.body().html(node.outerHtml());
       	} else {

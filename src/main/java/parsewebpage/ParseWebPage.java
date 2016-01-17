@@ -22,6 +22,12 @@ public abstract class ParseWebPage {
 		return parse(webpage);
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 * @param charsetName
+	 * @return 返回解析之后的结果对象，解析失败返回null
+	 */
 	public Object parse(File in, String charsetName) {
 		Document webpage = null;
 		try {
