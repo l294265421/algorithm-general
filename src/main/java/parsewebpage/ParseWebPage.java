@@ -108,6 +108,24 @@ public abstract class ParseWebPage {
 	
 	}
 	
+	protected void removeAllElementByTagName(Element element, 
+			String tagName) {
+		Elements elementsToRemove = element.
+				getElementsByTag(tagName);
+		for (Element temp : elementsToRemove) {
+			temp.remove();
+		}
+	}
+	
+	protected void removeAllElementByClass(Element element, 
+			String className) {
+		Elements elementsToRemove = element
+				.getElementsByClass(className);
+		for (Element temp : elementsToRemove) {
+			temp.remove();
+		}
+	}
+	
 	/**
 	 *（获得元素e下所有标签为tag的节点（不包括e节点））
 	 * @param e 元素
