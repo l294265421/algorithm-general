@@ -15,19 +15,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HmmFactoryTest {
-	private HmmFactory factory;
+	private SegmentationHmmFactory factory;
 	
 	@Before
 	public void before() {
-		factory = new HmmFactory();
+		factory = new SegmentationHmmFactory();
 	}
 
 	@Test
-	public void testFindAllChineseWordFromFile() {
+	public void testFindAllChineseWord() {
 		String fileName = "icwb2-data/training/"
 				+ "pku_training.utf8";
-		Charset cs = Charset.forName("utf-8");
-		List<String> words = factory.findAllChineseWordFromFile(fileName, cs);
+		List<String> sentences = CommonTools.
+				findAllChineseSentence(fileName, "UTF-8");
+		List<String> words = CommonTools.findAllChineseWord
+				(sentences.get(2));
+		for (String word : words) {
+			System.out.println(word);
+		}
 	}
 
 	@Test
@@ -47,4 +52,33 @@ public class HmmFactoryTest {
 		System.out.println(factory.count(words, "BM"));
 	}
 
+	@Test
+	public void testComputTransitionMatrix() {
+		String fileName = "icwb2-data/training/"
+				+ "pku_training.utf8";
+		List<String> sentences = CommonTools.
+				findAllChineseSentence(fileName, "UTF-8");
+		List<String> sentencesClassRepresentation = factory.
+				transferAllSentenceToClassRepresentation(sentences);
+		double[][] transitionMatrix = factory.
+				computTransitionMatrix(sentencesClassRepresentation);
+		for (double[] ds : transitionMatrix) {
+			for (double d : ds) {
+				System.out.print(d);
+				System.out.print(", ");
+			}
+			System.out.println();
+		}
+	}
+	
+	@Test
+	public void testFindAllChineseSentence() {
+		String fileName = "icwb2-data/training/"
+				+ "pku_training.utf8";
+		List<String> sentences = CommonTools.
+				findAllChineseSentence(fileName, "UTF-8");
+		for(int i = 0; i < 5; i++) {
+			System.out.println(sentences.get(i));
+		}
+	}
 }
