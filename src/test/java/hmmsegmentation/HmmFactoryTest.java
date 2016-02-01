@@ -15,13 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HmmFactoryTest {
-	private SegmentationHmmFactory factory;
 	
-	@Before
-	public void before() {
-		factory = new SegmentationHmmFactory();
-	}
-
 	@Test
 	public void testFindAllChineseWord() {
 		String fileName = "icwb2-data/training/"
@@ -38,7 +32,7 @@ public class HmmFactoryTest {
 	@Test
 	public void testTranferWordToClassRepresentation() {
 		String word = "李云聪王芳";
-		System.out.println(factory.
+		System.out.println(SegmentationHmmFactory.
 				tranferWordToClassRepresentation(word));
 	}
 
@@ -49,7 +43,7 @@ public class HmmFactoryTest {
 		words.add("BE");
 		words.add("S");
 		words.add("BMMME");
-		System.out.println(factory.count(words, "BM"));
+		System.out.println(SegmentationHmmFactory.count(words, "BM"));
 	}
 
 	@Test
@@ -58,9 +52,9 @@ public class HmmFactoryTest {
 				+ "pku_training.utf8";
 		List<String> sentences = CommonTools.
 				findAllChineseSentence(fileName, "UTF-8");
-		List<String> sentencesClassRepresentation = factory.
+		List<String> sentencesClassRepresentation = SegmentationHmmFactory.
 				transferAllSentenceToClassRepresentation(sentences);
-		double[][] transitionMatrix = factory.
+		double[][] transitionMatrix = SegmentationHmmFactory.
 				computTransitionMatrix(sentencesClassRepresentation);
 		for (double[] ds : transitionMatrix) {
 			for (double d : ds) {

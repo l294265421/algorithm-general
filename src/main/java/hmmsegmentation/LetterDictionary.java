@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-public class Dictionary {
+public class LetterDictionary {
 	private Map<String, Integer> dictionary;
 	
-	private Dictionary() {
+	private LetterDictionary() {
 		int serialNumber = 0;
 		dictionary = new HashMap<String, Integer>();
 		String fileName = "icwb2-data/training/"
@@ -33,11 +34,22 @@ public class Dictionary {
 	}
 	
 	private static class SingletonHolder {
-		private static Dictionary dictionary = new Dictionary();
+		private static LetterDictionary dictionary = new LetterDictionary();
 	}
 	
-	public static Dictionary getInstance() {
+	public static LetterDictionary getInstance() {
 		return SingletonHolder.dictionary;
 	}
 	
+	public int size() {
+		return dictionary.size();
+	}
+	
+	public Set<String> letters() {
+		return dictionary.keySet();
+	}
+	
+	public Integer value(String key) {
+		return dictionary.get(key);
+	}
 }
