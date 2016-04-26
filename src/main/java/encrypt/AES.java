@@ -57,8 +57,8 @@ public class AES {
 		
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey);//使用加密模式初始化 密钥
 		byte[] encrypt = cipher.doFinal(str.getBytes()); //按单部分操作加密或解密数据，或者结束一个多部分操作。
-		
 		System.out.println("method1-加密：" + Arrays.toString(encrypt));
+		
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);//使用解密模式初始化 密钥
 		byte[] decrypt = cipher.doFinal(encrypt);
 		System.out.println("method1-解密后：" + new String(decrypt));
@@ -76,8 +76,8 @@ public class AES {
 		
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey);//使用加密模式初始化 密钥
 		byte[] encrypt = cipher.doFinal(str.getBytes()); //按单部分操作加密或解密数据，或者结束一个多部分操作。
-		
 		System.out.println("method2-加密：" + Arrays.toString(encrypt));
+		
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);//使用解密模式初始化 密钥
 		byte[] decrypt = cipher.doFinal(encrypt);
 		System.out.println("method2-解密后：" + new String(decrypt));
@@ -100,8 +100,8 @@ public class AES {
 		
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(getIV()));//使用加密模式初始化 密钥
 		byte[] encrypt = cipher.doFinal(str.getBytes()); //按单部分操作加密或解密数据，或者结束一个多部分操作。
-		
 		System.out.println("method3-加密：" + Arrays.toString(encrypt));
+		
 		cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(getIV()));//使用解密模式初始化 密钥
 		byte[] decrypt = cipher.doFinal(encrypt);
 		System.out.println("method3-解密后：" + new String(decrypt));
@@ -119,11 +119,10 @@ public class AES {
 		
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(getIV()));//使用加密模式初始化 密钥
 		byte[] encrypt = cipher.doFinal(str.getBytes(), 0, str.length()); //按单部分操作加密或解密数据，或者结束一个多部分操作。
-		
 		System.out.println("method4-加密：" + Arrays.toString(encrypt));
+		
 		cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(getIV()));//使用解密模式初始化 密钥
 		byte[] decrypt = cipher.doFinal(encrypt);
-		
 		System.out.println("method4-解密后：" + new String(decrypt));
 		
 	}
