@@ -55,7 +55,7 @@ public class HmmFactoryTest {
 		List<String> sentencesClassRepresentation = SegmentationHmmFactory.
 				transferAllSentenceToClassRepresentation(sentences);
 		double[][] transitionMatrix = SegmentationHmmFactory.
-				computTransitionMatrix(sentencesClassRepresentation);
+				computeTransitionMatrix(sentencesClassRepresentation);
 		for (double[] ds : transitionMatrix) {
 			for (double d : ds) {
 				System.out.print(d);

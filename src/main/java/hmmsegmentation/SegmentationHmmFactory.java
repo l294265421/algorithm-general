@@ -19,10 +19,23 @@ public class SegmentationHmmFactory {
 		
 	}
 	
+	/**
+	 * 
+	 * @param word 词
+	 * @return word的类别表示，比如 美丽 -> BE
+	 */
 	public static String tranferWordToClassRepresentation(String word) {
+		if (word == null) {
+			throw new IllegalArgumentException("转化为类别表示形式的词不能为null");
+		}
+		
 		StringBuilder stringBuilder = new StringBuilder();
 		int len = word.length();
-		assert len != 0;
+		
+		if (len == 0) {
+			throw new IllegalArgumentException("转化为类别表示的词的长度不能为0");
+		}
+		
 		if (len == 1) {
 			stringBuilder.append("S");
 		} else {
@@ -35,6 +48,11 @@ public class SegmentationHmmFactory {
 		return stringBuilder.toString();
 	}
 	
+	/**
+	 * 
+	 * @param sentence 句子
+	 * @return 句子的类别表示 比如 我 喜欢 她 -> SBES
+	 */
 	public static String transferSentenceToClassRepresentation(
 			String sentence) {
 		List<String> words = CommonTools.findAllChineseWord(sentence);
@@ -47,6 +65,11 @@ public class SegmentationHmmFactory {
 		return sentenceClassRepresentation.toString();
 	}
 	
+	/**
+	 * 
+	 * @param sentences 句子集合
+	 * @return 句子集合中所有句子的类别表示的集合
+	 */
 	public static List<String> transferAllSentenceToClassRepresentation(
 			List<String> sentences) {
 		List<String> sentenceClassRepresentations = new 
@@ -57,14 +80,20 @@ public class SegmentationHmmFactory {
 		return sentenceClassRepresentations;
 	}
 	
+	/**
+	 * 
+	 * @param sentences 句子（类别）集合
+	 * @param pattern 模式 比如 美丽或BE
+	 * @return 模式在集合中出现的次数
+	 */
 	public static int count(List<String> sentences, String pattern) {
 		int count = 0;
 		int subWordLen = pattern.length();
-		for (String word : sentences) {
-			int len = word.length();
+		for (String sentence : sentences) {
+			int len = sentence.length();
 			int upBound = len - subWordLen;
 			for(int i = 0; i <= upBound; i++) {
-				if (word.subSequence(i, i + subWordLen).
+				if (sentence.subSequence(i, i + subWordLen).
 						equals(pattern)) {
 					count++;
 				}
@@ -73,7 +102,12 @@ public class SegmentationHmmFactory {
 		return count;
 	}
 	
-	public static double[][] computTransitionMatrix(List<String> 
+	/**
+	 * 计算转移矩阵。
+	 * @param sentencesClassRepresentation 句子类别表示集合
+	 * @return 转移矩阵
+	 */
+	public static double[][] computeTransitionMatrix(List<String> 
 		sentencesClassRepresentation) {
 		int classNum = ClassDictionary.getInstance().size();
 		double[][] transitionMatrix = new double[classNum][classNum];
@@ -83,22 +117,30 @@ public class SegmentationHmmFactory {
 		double SNum = count(sentencesClassRepresentation, "S");
 		String[] classs = new String[] {"B", "M", "E", "S"};
 		double[] counts = new double[] {BNum, MNum, ENum, SNum};
-		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 4; j++) {
+		for(int i = 0; i < classNum; i++) {
+			for(int j = 0; j < classNum; j++) {
 				String search = classs[i] + classs[j];
 				double searchNum = count(sentencesClassRepresentation, search);
+				 // Aij = P(Cj|Ci)  =  P(Ci,Cj) / P(Ci) = Count(Ci,Cj) / Count(Ci)
 				transitionMatrix[i][j] = searchNum / counts[i];
 			}
 		}
 		return transitionMatrix;
 	}
 	
+	/**
+	 * 计算发射矩阵
+	 * @param text 文本 比如 我喜欢你你喜欢我...
+	 * @param classRepresentations 文本的列别表示 SBESSBES
+	 * @return
+	 */
 	public static double[][] computeEmissionMatrix(String text, 
 			String classRepresentations) {
 		int classNum = ClassDictionary.getInstance().size();
 		int letterNum = LetterDictionary.getInstance().size();
 		double[][] emissionMatrix = new double[classNum][letterNum];
 		
+		// 统计每个类别出现了多少次
 		Map<String, Integer> classCount = new HashMap<String, Integer>();
 		List<String> sentences = new LinkedList<String>();
 		sentences.add(classRepresentations);
@@ -107,6 +149,7 @@ public class SegmentationHmmFactory {
 			classCount.put(classRepresentation, num);
 		}
 		
+		// 统计每种字符/类别对出现了多少次
 		Map<LetterClassPair, Integer> letterClassPairCount = 
 				new HashMap<LetterClassPair, Integer>();
 		int len = text.length();
@@ -125,9 +168,26 @@ public class SegmentationHmmFactory {
 			int secondIndex = LetterDictionary.getInstance().value(letterClassPair.getLetter());
 			int letterClassPairNum = letterClassPairCount.get(letterClassPair);
 			int classNumTemp = classCount.get(letterClassPair.getClassRepresentation());
-			double probability = (double) letterClassPairNum / classNumTemp;
+			// Bij = P(Oj|Ci)  =  P(Oj,Ci) / P(Ci) = Count(Oj,Ci) / Count(Ci)
+			// Bij = P(Oj|Ci)  =  (Count(Oj,Ci) + 1)/ Count(Ci)
+			double probability = (double) (letterClassPairNum + 1) / classNumTemp;
 			emissionMatrix[firstIndex][secondIndex] = probability;
 		}
+		
+		// 处理矩阵中的0
+		for(int i = 0; i < classNum; i ++) {
+			for(int j = 0; j < letterNum; j++) {
+				if (emissionMatrix[i][j] == 0) {
+					String classRepresentation = ClassDictionary.
+							getInstance().key(i);
+					int classNumTemp = classCount.get(classRepresentation);
+					// Bij = P(Oj|Ci)  =  (Count(Oj,Ci) + 1)/ Count(Ci)
+					double probability = (double) 1 / classNumTemp;
+					emissionMatrix[i][j] = probability;
+				}
+			}
+		}
+		
 		return emissionMatrix;
 	}
 	
@@ -151,7 +211,7 @@ public class SegmentationHmmFactory {
 		List<String> sentences = CommonTools.
 				findAllChineseSentence(fileName, "UTF-8");
 		List<String> sentencesClassRepresentation = transferAllSentenceToClassRepresentation(sentences);
-		double[][] transitionMatrix = computTransitionMatrix(sentencesClassRepresentation);
+		double[][] transitionMatrix = computeTransitionMatrix(sentencesClassRepresentation);
 		for(int i = 0; i < transitionMatrix.length; i++) {
 			for(int j = 0; j < transitionMatrix[0].length; j++) {
 				hmm.setAij(i, j, transitionMatrix[i][j]);

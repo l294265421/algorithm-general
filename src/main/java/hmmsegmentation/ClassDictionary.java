@@ -2,8 +2,14 @@ package hmmsegmentation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * 类别/序号键值对集合。用于把转移矩阵的行列号或者发射矩阵中的行序号对应上类别。
+ * @author yuncong
+ *
+ */
 public class ClassDictionary {
 	private Map<String, Integer> dictionary;
 	
@@ -34,5 +40,14 @@ public class ClassDictionary {
 
 	public Integer value(String key) {
 		return dictionary.get(key);
+	}
+	
+	public String key(Integer valuse) {
+		for (Entry<String, Integer> entry : dictionary.entrySet()) {
+			if (entry.getValue() == valuse) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 }

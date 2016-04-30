@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 字符/序号键值对集合。用在把发射矩阵中的列号对应上字符。
+ * @author yuncong
+ *
+ */
 public class LetterDictionary {
 	private Map<String, Integer> dictionary;
 	
