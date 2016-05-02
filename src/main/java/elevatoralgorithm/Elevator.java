@@ -341,11 +341,19 @@ public class Elevator {
 			}
 		}
 
+		/**
+		 * 接收一个来自人的命令。命令告诉电梯自己在哪里，要去哪里，命令满足的条件：
+		 * （1）已经在最低楼，不能去更下面，已经在顶楼，不能去更上面
+		 * （2）所在的地方和目的地不能一样
+		 * @param instruction
+		 * @return
+		 */
 		private boolean receive(Instruction instruction) {
 			if ((instruction.getOrigion() == elevator.maxPosition && instruction
 					.getDirection() == Direction.UP)
 					|| (instruction.getOrigion() == elevator.minPosition && instruction
-							.getDirection() == Direction.DOWN)) {
+							.getDirection() == Direction.DOWN)
+					|| instruction.getOrigion() == instruction.getDestination()) {
 				return false;
 			}
 

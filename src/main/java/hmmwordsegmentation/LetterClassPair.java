@@ -1,5 +1,10 @@
-package hmmsegmentation;
+package hmmwordsegmentation;
 
+/**
+ * 字符/类别对 比如 你/S
+ * @author yuncong
+ *
+ */
 public class LetterClassPair {
 	private String letter;
 	private String classRepresentation;

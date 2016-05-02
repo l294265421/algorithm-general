@@ -1,6 +1,8 @@
 package hmmsegmentation;
 
 import static org.junit.Assert.*;
+import hmmwordsegmentation.CommonTools;
+import hmmwordsegmentation.SegmentationHmmFactory;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;

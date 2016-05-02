@@ -1,4 +1,4 @@
-package hmmsegmentation;
+package hmmwordsegmentation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,9 +42,9 @@ public class ClassDictionary {
 		return dictionary.get(key);
 	}
 	
-	public String key(Integer valuse) {
+	public String key(Integer value) {
 		for (Entry<String, Integer> entry : dictionary.entrySet()) {
-			if (entry.getValue() == valuse) {
+			if (entry.getValue() == value) {
 				return entry.getKey();
 			}
 		}

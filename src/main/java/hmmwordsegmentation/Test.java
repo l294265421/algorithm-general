@@ -1,4 +1,4 @@
-package hmmsegmentation;
+package hmmwordsegmentation;
 
 import java.util.ArrayList;
 import java.io.IOException;

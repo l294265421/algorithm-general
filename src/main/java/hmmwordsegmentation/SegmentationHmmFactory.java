@@ -1,5 +1,6 @@
-package hmmsegmentation;
+package hmmwordsegmentation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,6 +154,11 @@ public class SegmentationHmmFactory {
 		Map<LetterClassPair, Integer> letterClassPairCount = 
 				new HashMap<LetterClassPair, Integer>();
 		int len = text.length();
+		int len1 = classRepresentations.length();
+		if (len != len1) {
+			throw new IllegalArgumentException("text的长度和classRepresentations的长度不一样");
+		}
+		
 		for(int i = 0; i < len; i++) {
 			LetterClassPair letterClassPair = new LetterClassPair
 					(text.substring(i, i + 1), classRepresentations.substring(i, i + 1));
@@ -220,7 +226,10 @@ public class SegmentationHmmFactory {
 		
 		StringBuilder text = new StringBuilder();
 		for (String sentence : sentences) {
-			text.append(sentence);
+			List<String> words = CommonTools.findAllChineseWord(sentence);
+			for (String word : words) {
+				text.append(word);
+			}
 		}
 		StringBuilder classRepresentations = new StringBuilder();
 		for (String sentenceClassRepresentation : sentencesClassRepresentation) {
@@ -232,6 +241,52 @@ public class SegmentationHmmFactory {
 		}
 		
 		return hmm;
+	}
+	
+	/**
+	 * 
+	 * @param sentence 句子
+	 * @return 句子中每一个字用对应的序号表示，生成的观察序列
+	 */
+	public static ArrayList<ObservationInteger> generateObservationSequence(String sentence) {
+		if (sentence == null) {
+			return null;
+		}
+		int len = sentence.length();
+		if (len == 0) {
+			return null;
+		}
+		
+		LetterDictionary letterDictionary = LetterDictionary.getInstance();
+		ArrayList<ObservationInteger> observationSequence = new ArrayList<ObservationInteger>();
+		for(int i = 0; i < len; i++) {
+			String letter = sentence.substring(i, i + 1);
+			Integer serialNum = letterDictionary.value(letter);
+			observationSequence.add(new ObservationInteger(serialNum));
+		}
+		return observationSequence;
+	}
+	
+	/**
+	 * 
+	 * @param hiddenStatesSeq 隐藏状态序列
+	 * @return 把隐藏状态序列中的序列号转化为对应的隐藏状态
+	 */
+	public static String[] hiddenStatesSeqToHiddenStates(int[] hiddenStatesSeq) {
+		if (hiddenStatesSeq == null) {
+			return null;
+		}
+		int len = hiddenStatesSeq.length;
+		if (len == 0) {
+			return null;
+		}
+		
+		ClassDictionary classDictionary = ClassDictionary.getInstance();
+		String[] hiddenStates = new String[len];
+		for(int i = 0; i < len; i++) {
+			hiddenStates[i] = classDictionary.key(hiddenStatesSeq[i]);
+		}
+		return hiddenStates;
 	}
 	
 	public static void main(String[] args) {
