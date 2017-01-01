@@ -19,8 +19,8 @@ public class MD {
 		String result = "";
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance(algorithmName);
-			byte[] md5bytes = messageDigest.digest(input.getBytes());
-			result = Hex.encodeHexString(md5bytes);
+			byte[] mdbytes = messageDigest.digest(input.getBytes());
+			result = Hex.encodeHexString(mdbytes);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
