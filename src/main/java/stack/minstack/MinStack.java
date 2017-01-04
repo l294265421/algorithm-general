@@ -1,13 +1,11 @@
 package stack.minstack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 最小栈:有三个方法，出栈(pop)、入栈(push)和取得最小值(getMin)，三个方法
  * <br/>的时间复杂度都是O(1)。
  * 实现思路:用一个辅助栈，如果当前入栈元素是最小值，就将当前元素在栈中的位置
  * <br/>入栈到辅助栈，如果当前出栈元素是当前最小值，就将辅助栈栈顶元素出栈。
+ * @see http://mp.weixin.qq.com/s/JwtO4ZXIcCXNR8VVsbFafA
  * @author liyuncong
  *
  */
