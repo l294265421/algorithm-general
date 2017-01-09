@@ -2,6 +2,7 @@ package arithmeticcoding;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Objects;
  * 算术编码，就是用一个数编码一串字符串。它的思想思想是这样的:给出一个区间,
  * <br/>这个区间被分成n份，n是这串字符串中不同字符的个数，每一份占区间长度的比例
  * <br/>与相应字符出现次数占整个字符串长度的比例，这样，任何一个字符就与区间中的一个子区间
- * <br/>一一对应，最开始的区间为[0, 1),通过字符串的第一个字符得到对应的区间，
+ * <br/>一一对应，最开始的区间为[0, 1)(后面可以知道这是很有用的，range乘以这个区间的值不会大于range),通过字符串的第一个字符得到对应的区间，
  * <br/>通过第二个字符得到第一个区间中的一个子区间，不断迭代下去，直到字符被
  * <br/>用尽，用由最后一个字符得到的区间中的任何一个数字就能代表整个字符串。
  * <br/>
@@ -25,15 +26,16 @@ import java.util.Objects;
  *
  */
 public class ArithmeticCoding {
+	private static final char TERMINATER ='$';
 	private String input;
 	private Map<Character, Interval> characterIntervalMap = new HashMap<Character, Interval>();
 
 	/**
 	 * 
-	 * @param input 需要编码的字符串
+	 * @param input 需要编码的字符串，以为结束符$结尾
 	 * @param characterIntervalMap 字符的初始区间
 	 * @throws NullPointerException 当input为null时
-	 * @throws IllegalArgumentException 当input长度为0时
+	 * @throws IllegalArgumentException 当input长度为0或不以$结尾时
 	 */
 	public ArithmeticCoding(String input, Map<Character, Interval> characterIntervalMap) {
 		if (input == null) {
@@ -42,15 +44,18 @@ public class ArithmeticCoding {
 		if (input.length() == 0) {
 			throw new IllegalArgumentException("input'lenght is 0");
 		}
+		if (!input.endsWith(String.valueOf(TERMINATER))) {
+			throw new IllegalArgumentException("input don't end with $");
+		}
 		this.input = input;
 		this.characterIntervalMap = Objects.requireNonNull(characterIntervalMap, "characterIntervalMap is null");
 	}
 	
 	/**
 	 * 这个方法对input作统计得到字符区间
-	 * @param input 需要编码的字符串
+	 * @param input 需要编码的字符串，以为结束符$结尾
 	 * @throws NullPointerException 当input为null时
-	 * @throws IllegalArgumentException 当input长度为0时
+	 * @throws IllegalArgumentException 当input长度为0或不以$结尾时
 	 */
 	public ArithmeticCoding(String input) {
 		if (input == null) {
@@ -58,6 +63,9 @@ public class ArithmeticCoding {
 		}
 		if (input.length() == 0) {
 			throw new IllegalArgumentException("input'lenght is 0");
+		}
+		if (!input.endsWith(String.valueOf(TERMINATER))) {
+			throw new IllegalArgumentException("input don't end with $");
 		}
 		this.input = input;
 		
@@ -153,12 +161,51 @@ public class ArithmeticCoding {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		BigInteger bigInteger = new BigInteger("123");
-		System.out.println(bigInteger.toString(10));
-		BigDecimal bigDecimal = new BigDecimal(bigInteger, 3);
-		System.out.println(bigDecimal);
-		System.out.println(new BigDecimal(1).divide(new BigDecimal(2).pow(0 + 1)));
-		System.out.println(new BigDecimal("0").add(new BigDecimal(0.5)));
+	/**
+	 * 
+	 * @param encode
+	 * @throws NullPointerException if encode is null
+	 * @return
+	 */
+	public String decode(String encode) {
+		if (encode == null) {
+			throw new NullPointerException("encode is null");
+		}
+		BigDecimal value = binaryStringToBigDecimal(encode);
+		BigDecimal low;
+		BigDecimal high;
+		BigDecimal range;
+		StringBuilder result = new StringBuilder();
+		char lastChar;
+		do {
+			Entry<Character, Interval> entry = findEntry(value);
+			if (entry == null) {
+				System.out.println("解码失败，已经解码部分为:" + result.toString());
+				return result.toString();
+			}
+			lastChar = entry.getKey();
+			result.append(lastChar);
+			low = entry.getValue().getLeft();
+			high = entry.getValue().getRight();
+			range = high.subtract(low);
+			value = value.subtract(low).divide(range, RoundingMode.CEILING);
+		} while (lastChar != TERMINATER);
+		return result.toString();
 	}
+	
+	/**
+	 * 
+	 * @param value
+	 * @return 没有找到返回null
+	 */
+	private Entry<Character, Interval> findEntry(BigDecimal value) {
+		for(Entry<Character, Interval> entry : characterIntervalMap.entrySet()) {
+			if (value.compareTo(entry.getValue().getLeft()) > 0 
+					&& value.compareTo(entry.getValue().getRight()) < 0) {
+				return entry;
+			}
+		}
+		return null;
+	}
+	
 }

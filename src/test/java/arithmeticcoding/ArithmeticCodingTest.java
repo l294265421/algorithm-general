@@ -41,7 +41,10 @@ public class ArithmeticCodingTest {
 
 	@Test
 	public void testEncode() {
-		System.out.println(arithmeticCoding.encode());
+		String encode = arithmeticCoding.encode();
+		System.out.println(encode);
+		String decode = arithmeticCoding.decode(encode);
+		System.out.println(decode);
 	}
 
 }
